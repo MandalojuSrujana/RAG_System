@@ -11,7 +11,7 @@
             overflow: hidden; 
         }
 
-        /* TOP NAVIGATION */
+        
         .topbar {
             display: flex;
             justify-content: space-between;
@@ -39,7 +39,7 @@
             background: #0f3c4a;
         }
 
-        /* HEADER */
+        
         .header {
             background: #4f67b7;
             color: white;
@@ -51,13 +51,13 @@
         .header h1 { margin: 5px 0; font-size: 24px; }
         .header p { margin: 5px 0; opacity: 0.9; }
 
-        /* LAYOUT CONTAINER */
+        
         .container {
             display: flex;
             height: calc(100vh - 140px); 
         }
 
-        /* SIDEBAR */
+        
         .sidebar {
             width: 25%;
             background: #e7f1ff;
@@ -72,7 +72,7 @@
         .sidebar li { margin-bottom: 12px; }
         .sidebar a { text-decoration: none; color: #0b5ed7; font-weight: 500; }
 
-        /* MAIN CHAT AREA */
+        
         .main {
             flex: 1;
             display: flex;
@@ -97,28 +97,28 @@
             border-left: 6px solid;
         }
 
-        /* Green for Correct Response */
+        
 .answer.success { 
     background: #e8f5e9; 
     color: #2e7d32; 
     border-left: 6px solid #4caf50; 
 }
 
-/* Red for Invalid Question */
+
 .answer.error { 
     background: #ffebee; 
     color: #c62828; 
     border-left: 6px solid #ef5350; 
 }
 
-/* Blue for Contact Support */
+
 .answer.info { 
     background: #e3f2fd; 
     color: #1565c0; 
     border-left: 6px solid #2196f3; 
 }
 
-        /* INPUT AREA & BUTTON ALIGNMENT */
+        
         .input-area {
             padding-top: 20px;
             border-top: 1px solid #eee;
@@ -135,10 +135,10 @@
             margin-bottom: 10px;
         }
 
-        /* Flex container for the two buttons */
+        
         .button-group {
             display: flex;
-            justify-content: space-between; /* Pushes Ask to left and Clear to right */
+            justify-content: space-between;
             align-items: center;
         }
 
@@ -243,14 +243,6 @@
 
             <div class="input-area">
                 <form method="POST">
-                    <!-- <div style="margin-bottom: 10px; font-size: 14px; color: #4f67b7;">
-                        <label for="language"><b>Select Language:</b></label>
-                        <select name="language" id="language" style="padding: 5px; border-radius: 5px; border: 1px solid #4f67b7;">
-                            <option value="en">English</option>
-                            <option value="te">Telugu (తెలుగు)</option>
-                            <option value="hi">Hindi (हिंदी)</option>
-                        </select>
-                    </div> -->
                     <textarea 
                         name="question"
                         class="question-box"
@@ -296,7 +288,6 @@
     }
 
     document.addEventListener("DOMContentLoaded", function() {
-        // Apply only to the LAST assistant message
         const answers = document.querySelectorAll('.answer span');
         if (answers.length > 0) {
             typeEffect(answers[answers.length - 1], 30); 

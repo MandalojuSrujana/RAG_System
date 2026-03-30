@@ -6,8 +6,6 @@ from langchain_core.prompts import PromptTemplate
 from langchain_groq import ChatGroq
 from langchain.chains.retrieval_qa.base import RetrievalQA
 from datetime import datetime, timedelta
-# import langchain
-# langchain.globals.set_verbose(False)
 
 app = Flask(__name__)
 app.secret_key = "hospital_secret"
@@ -212,10 +210,8 @@ XXX-XXX-XXXX
 # LOAD VECTOR DATABASE
 # ----------------------
 
-# ================= NEW RAG INITIALIZATION =================
 DB_FAISS_PATH = "data/vectorstore/db_faiss"
 
-# Exact model from your create_memory_for_llm.py
 embedding_model = HuggingFaceEmbeddings(
     model_name='sentence-transformers/all-MiniLM-L6-v2'
 )
@@ -387,7 +383,7 @@ def get_patient_history_text(username):
     return "No past medical history recorded."
 
 # ----------------------
-# CHATBOT (Updated with Sidebar Section Logic)
+# CHATBOT
 # ----------------------
 
 @app.route("/chat", methods=["GET","POST"])
@@ -398,7 +394,7 @@ def home():
     patient_name = session["name"]
     username = session["user"]
     
-    # 1. SIDEBAR CLICK LOGIC (Keep as is)
+    # 1. SIDEBAR CLICK LOGIC
     section_key = request.args.get('section')
     if section_key:
         section_content = sections.get(section_key, "Information not found.")
@@ -409,26 +405,23 @@ def home():
         user_question = request.form["question"].strip()
         
         if user_question:
-            # 1. Load the history text
             personal_history_text = "No previous medical records found."
             history_file_path = os.path.join("patient_records", f"{username}.txt")
             if os.path.exists(history_file_path):
                 with open(history_file_path, "r", encoding="utf-8") as f:
                     personal_history_text = f.read().strip()
 
-            # 2. Prepare the prompt by filling in the history NOW
-            # This turns a 3-variable template into a 2-variable template (context & question)
             base_prompt = get_rag_prompt()
             partial_prompt = base_prompt.partial(patient_history=personal_history_text)
 
-            # 3. Initialize LLM
+            #  Initialize LLM
             llm = ChatGroq(
                 model_name="llama-3.3-70b-versatile",
                 temperature=0.0,
                 groq_api_key=os.getenv("GROQ_API_KEY") 
             )
 
-            # 4. Create the chain using the partial_prompt
+            # Create the chain using the partial_prompt
             qa_chain = RetrievalQA.from_chain_type(
                 llm=llm,
                 chain_type="stuff",
@@ -437,13 +430,10 @@ def home():
                 chain_type_kwargs={"prompt": partial_prompt} # No more "extra inputs" error
             )
 
-            # 5. Run the chain
+            # Run the chain
             response = qa_chain.invoke({"query": user_question})
             raw_result = response["result"]
             
-            # ... (keep your result handling and database logic the same)
-            
-            # Result handling logic remains the same
             if raw_result == "INVALID_QUESTION":
                 answer = "❌ Please enter a clear hospital-related question."
                 res_type = "error"
@@ -487,11 +477,9 @@ def patient_history():
     history_data = None
     message = None
 
-    # Define paths
     txt_path = f"patient_records/{username}.txt"
     pdf_path = f"patient_records/{username}.pdf"
 
-    # 1. Check for Text Record
     if os.path.exists(txt_path):
         with open(txt_path, "r", encoding="utf-8") as file:
             history_data = file.read().strip()
@@ -499,12 +487,10 @@ def patient_history():
         if not history_data:
             message = "Your record is currently empty."
 
-    # 2. If no text record, check for PDF
     elif os.path.exists(pdf_path):
         history_data = "Your medical report is available for download as a PDF."
-        # Optional: You can add a flag here to show a download button in HTML
-    
-    # 3. If neither exists
+        
+
     else:
         message = "You have no history with this hospital."
 
@@ -681,15 +667,13 @@ def download_summary():
         with open(file_path, "r", encoding="utf-8") as file:
             content = file.read()
             
-            # --- THE FIX STARTS HERE ---
-            # This replaces special dashes, quotes, and symbols with safe versions
-            content = content.replace('\u2013', '-').replace('\u2014', '-') # Dashes
-            content = content.replace('\u2018', "'").replace('\u2019', "'") # Smart quotes
-            content = content.replace('\u201c', '"').replace('\u201d', '"') # Smart double quotes
+           
+            content = content.replace('\u2013', '-').replace('\u2014', '-') 
+            content = content.replace('\u2018', "'").replace('\u2019', "'") 
+            content = content.replace('\u201c', '"').replace('\u201d', '"') 
             
-            # This final line removes any other character FPDF can't handle
+            
             safe_content = content.encode('latin-1', 'replace').decode('latin-1')
-            # ---------------------------
             
             pdf.multi_cell(0, 10, txt=safe_content)
     else:
@@ -705,24 +689,19 @@ def cancel_appointment(appt_id):
         return redirect("/")
 
     conn = sqlite3.connect("appointments.db")
-    conn.row_factory = sqlite3.Row # Allows accessing columns by name
+    conn.row_factory = sqlite3.Row 
     cursor = conn.cursor()
 
-    # 1. Fetch the specific appointment
     cursor.execute("SELECT * FROM appointments WHERE id = ?", (appt_id,))
     appt = cursor.fetchone()
 
     if appt:
-        # 2. Combine date and time strings into a single datetime object
-        # Assuming format: Date '2026-03-30' and Time '10:30'
         appt_datetime_str = f"{appt['appointment_date']} {appt['appointment_time']}"
         appt_datetime = datetime.strptime(appt_datetime_str, "%Y-%m-%d %H:%M")
         
-        # 3. Calculate time difference
         current_time = datetime.now()
         time_diff = appt_datetime - current_time
 
-        # 4. Check if it's more than 24 hours away
         if time_diff > timedelta(hours=24):
             cursor.execute("DELETE FROM appointments WHERE id = ?", (appt_id,))
             conn.commit()
@@ -733,7 +712,6 @@ def cancel_appointment(appt_id):
         message = "Error: Appointment not found."
 
     conn.close()
-    # Redirect back to dashboard (ensure your dashboard template displays a 'message' if needed)
     return redirect(url_for("dashboard", msg=message))
 
 from fpdf import FPDF
@@ -745,7 +723,6 @@ def download_slip(appt_id):
     if "user" not in session:
         return redirect("/")
 
-    # 1. Get the specific appointment details
     conn = sqlite3.connect("appointments.db")
     cursor = conn.cursor()
     cursor.execute("SELECT id, doctor, appointment_date, appointment_time FROM appointments WHERE id=? AND username=?", (appt_id, session["user"]))
@@ -755,13 +732,11 @@ def download_slip(appt_id):
     if not appt:
         return "Appointment not found", 404
 
-    # 2. Create PDF in Memory
     pdf = FPDF()
     pdf.add_page()
     
-    # --- PDF Styling ---
-    pdf.set_fill_color(31, 111, 139) # Your theme color #1f6f8b
-    pdf.rect(0, 0, 210, 40, 'F') # Header background
+    pdf.set_fill_color(31, 111, 139) 
+    pdf.rect(0, 0, 210, 40, 'F') 
     
     pdf.set_font("Arial", 'B', 24)
     pdf.set_text_color(255, 255, 255)
@@ -770,9 +745,8 @@ def download_slip(appt_id):
     pdf.set_font("Arial", size=12)
     pdf.cell(0, 10, "Digital Appointment Token", ln=True, align='C')
     
-    pdf.ln(20) # Spacer
+    pdf.ln(20) 
     
-    # Body Text
     pdf.set_text_color(0, 0, 0)
     pdf.set_font("Arial", 'B', 16)
     pdf.cell(0, 10, f"Token ID: #SR-{appt[0]:04d}", ln=True)
@@ -788,13 +762,11 @@ def download_slip(appt_id):
     pdf.set_font("Arial", 'I', 10)
     pdf.multi_cell(0, 10, "Instructions:\n1. Please arrive 15 minutes before your slot.\n2. Present this digital slip at the OPD reception.\n3. Masks are mandatory within hospital premises.", align='L')
     
-    # Optional: Footer
     pdf.set_y(-30)
     pdf.set_font("Arial", size=8)
     pdf.set_text_color(150, 150, 150)
     pdf.cell(0, 10, "Generated by Sunrise AI Healthcare System - 2026", align='C')
 
-    # 3. Stream the file to the browser
     output = io.BytesIO()
     pdf_output = pdf.output()
     output.write(pdf_output)
@@ -807,7 +779,6 @@ def admin_login():
     username = request.form.get('admin_user')
     password = request.form.get('admin_pass')
 
-    # FIXED CREDENTIALS
     ADMIN_USER = "admin@sunrise"
     ADMIN_PASS = "admin123"
 
@@ -822,22 +793,18 @@ def admin_dashboard():
     if not session.get('admin_logged_in'):
         return redirect('/')
 
-    # 1. Fetch appointments from appointments.db
     conn_apt = sqlite3.connect("appointments.db")
     cursor_apt = conn_apt.cursor()
     
-    # Corrected column names to match your init_appointment_db() schema
     cursor_apt.execute("SELECT id, username, doctor, appointment_date, appointment_time FROM appointments ORDER BY appointment_date DESC")
     all_appointments = cursor_apt.fetchall()
 
-    # Fetch today's count
     from datetime import date
     today = date.today().strftime("%Y-%m-%d")
     cursor_apt.execute("SELECT COUNT(*) FROM appointments WHERE appointment_date=?", (today,))
     today_count = cursor_apt.fetchone()[0]
     conn_apt.close()
 
-    # 2. Fetch total patient count from users.db
     conn_user = sqlite3.connect("users.db")
     cursor_user = conn_user.cursor()
     cursor_user.execute("SELECT COUNT(*) FROM users")
@@ -860,21 +827,18 @@ def admin_upload():
     if not patient_user or not file:
         return "Missing username or file", 400
 
-    # Ensure the directory exists
     upload_folder = "patient_records"
     if not os.path.exists(upload_folder):
         os.makedirs(upload_folder)
 
-    # Get the file extension (e.g., .txt or .pdf)
     file_extension = os.path.splitext(file.filename)[1]
     
-    # Save as username.extension (e.g., srujana.txt)
     filename = f"{patient_user}{file_extension}"
     save_path = os.path.join(upload_folder, filename)
     
     file.save(save_path)
     
-    return redirect('/admin_dashboard') # Refresh the page after upload
+    return redirect('/admin_dashboard') 
 # ----------------------
 # LOGOUT
 # ----------------------
@@ -885,5 +849,4 @@ def logout():
     return redirect("/")
 
 if __name__ == "__main__":
-    # debug=True is fine, but use_reloader=False stops the infinite crashing loop
     app.run(debug=True, use_reloader=False)

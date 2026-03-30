@@ -7,7 +7,6 @@
         font-family: 'Inter', 'Segoe UI', sans-serif;
         margin: 0;
         min-height: 100vh;
-        /* 1. High-end Mesh Gradient Background */
         background-color: #f8fafc;
         background-image: 
             radial-gradient(at 0% 0%, rgba(186, 230, 253, 0.5) 0px, transparent 50%),
@@ -20,9 +19,9 @@
         padding: 80px 20px;
     }
 
-    /* 2. Floating Glass Header */
+   
     .header {
-        background: rgba(169, 82, 102, 0.9); /* Dark Navy */
+        background: rgba(169, 82, 102, 0.9);
         backdrop-filter: blur(10px);
         color: white;
         padding: 25px 40px;
@@ -37,9 +36,8 @@
         border-bottom: none;
     }
 
-    /* 3. The Glassmorphism Card */
+    
 
-    /* 4. Maintaining data integrity */
     pre {
         white-space: pre-wrap;
         font-family: 'Inter', sans-serif;
@@ -50,7 +48,6 @@
         text-shadow: 0 1px 0px rgba(255,255,255,0.5);
     }
 
-    /* 5. Neon Styled Buttons */
     .back-btn {
         position: fixed;
         top: 30px;
@@ -93,41 +90,36 @@
         transform: scale(1.02);
     }
 
-    /* 1. Updated Container: Remove the fixed background color here */
-.container {
-    width: 100%;
-    max-width: 900px;
-    position: relative;
-    border-radius: 24px;
-    background: #ffffff;
-    /* Remove 'background' from here so it doesn't show through the bottom */
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1); 
-    overflow: hidden; 
-    /* This ensures the container height matches the content exactly */
-    display: table; 
-}
 
-/* 2. Updated Card: This now controls the background and shrinking */
-.card {
-    background: rgba(255, 255, 255, 0.85); 
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    /* Lower the padding for "No History" view, increase it for data */
-    padding: 40px 60px; 
-    border-radius: 0 0 24px 24px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    /* Ensures no extra height is forced */
-    min-height: auto; 
-}
+    .container {
+        width: 100%;
+        max-width: 900px;
+        position: relative;
+        border-radius: 24px;
+        background: #ffffff;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1); 
+        overflow: hidden; 
+        display: table; 
+    }
 
-/* 3. Message Styling (for the "No history" text) */
-.card p {
-    text-align: center;
-    font-size: 18px;
-    color: #64748b;
-    margin: 0;
-    font-weight: 500;
-}
+    .card {
+        background: rgba(255, 255, 255, 0.85); 
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        padding: 40px 60px; 
+        border-radius: 0 0 24px 24px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        min-height: auto; 
+    }
+
+
+    .card p {
+        text-align: center;
+        font-size: 18px;
+        color: #64748b;
+        margin: 0;
+        font-weight: 500;
+    }
 </style>
 </head>
 
