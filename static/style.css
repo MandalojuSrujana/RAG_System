@@ -1,0 +1,95 @@
+body{
+    font-family: Arial, sans-serif;
+    background:#f4f8fb;
+}
+
+/* MAIN CONTAINER */
+
+.container{
+    width:720px;
+    margin:auto;
+    margin-top:60px;
+    background:white;
+    padding:35px;
+    border-radius:12px;
+    box-shadow:0px 5px 20px rgba(0,0,0,0.1);
+}
+
+/* TITLE */
+
+h1{
+    text-align:center;
+    color:#1f6f8b;
+}
+
+/* SUBTITLE */
+
+.subtitle{
+    text-align:center;
+    color:#666;
+    margin-bottom:25px;
+}
+
+/* QUESTION INPUT */
+
+textarea{
+    width:100%;
+    height:110px;
+    padding:12px;
+    font-size:15px;
+    border-radius:6px;
+    border:1px solid #ccc;
+    resize:none;
+}
+
+/* BUTTON */
+
+button{
+    margin-top:18px;
+    width:100%;
+    padding:12px;
+    background:#1f6f8b;
+    color:white;
+    border:none;
+    border-radius:6px;
+    font-size:16px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+button:hover{
+    background:#144d5e;
+}
+
+/* ANSWER BOX BASE */
+
+.answer-box{
+    margin-top:25px;
+    padding:18px;
+    border-radius:6px;
+    font-size:15px;
+}
+
+/* VALID ANSWER */
+
+.success{
+    background:#d4edda;
+    color:#155724;
+    border-left:6px solid #28a745;
+}
+
+/* INVALID QUESTION */
+
+.error{
+    background:#f8d7da;
+    color:#721c24;
+    border-left:6px solid #dc3545;
+}
+
+/* CONTACT SUPPORT */
+
+.info{
+background:#ffe5b4;
+color:#8a4b08;
+border-left:5px solid orange;
+}

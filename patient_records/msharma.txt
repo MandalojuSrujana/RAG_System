@@ -1,0 +1,39 @@
+Patient Name: Meena
+Patient ID: P101
+Age: 40
+Gender: Female
+Blood Group: B+
+
+Emergency Contact & Lifestyle:
+Emergency Contact: Rajesh (Spouse) – +91 XXX-XXX-XXXX
+Allergies: No known drug allergies (NKDA)
+Lifestyle: Sedentary (Desk job), Non-smoker, Occasional caffeine consumer
+
+Lab Reports: (Last Checked: 10 Mar 2026):
+Blood Pressure: 145/90 mmHg (Slightly Elevated)
+Weight/BMI: 68 kg / 26.5 (Overweight category)
+SpO2: 98% on room air
+Blood Sugar: 130 mg/dL
+Cholesterol: 210 mg/dL
+
+
+Clinical Risk Assessment:
+Cardiovascular Risk: Moderate (due to Hypertension + Cholesterol > 200 mg/dL)
+Diabetic Status: Controlled (Blood Sugar 130 mg/dL is within acceptable post-meal limits)
+
+Medical History:
+- Hypertension diagnosed in 2022
+- Type 2 Diabetes diagnosed in 2023
+
+Current Medications:
+- Amlodipine 5mg daily
+- Metformin 500mg daily
+
+Upcoming Appointments:
+Dr. Suresh Reddy (Cardiology) – 25 Mar 2025
+Dr. Suresh Reddy (Cardiology) – 25 Apr 2025
+
+Doctor Notes:
+Patient should maintain low salt diet and exercise regularly.
+Ergonomic Breaks: Since the patient has a desk job, she is advised to take a 5-minute "standing/walking break" every hour to improve peripheral circulation.
+Hydration: Increase water intake to 2–3 liters daily; limit "occasional caffeine" to no more than 1–2 cups to avoid heart rate spikes.

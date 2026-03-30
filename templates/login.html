@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hospital Login</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: url("/static/bg.jpg");
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            margin: 0;
+            /* Column layout: Title on top, content below */
+            display: flex;
+            flex-direction: column; 
+            align-items: flex-start; /* Aligns content to the left */
+            padding-left: 100px;
+        }
+
+        h1 {
+            /* Text Styling */
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-align: left; /* Aligned left to match your layout */
+            letter-spacing: -1.5px;
+            
+            /* Gradient Effect */
+            background: linear-gradient(90deg, #06171d 0%, #4f67b7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+
+            /* Positioning */
+            margin-top: 60px; 
+            margin-bottom: 40px;
+            width: fit-content;
+            
+            /* Animation */
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .container {
+            width: 400px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            animation: slideIn 0.8s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #333;
+            font-size: 24px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 12px;
+            background: #1f6f8b;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #15576e;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(31, 111, 139, 0.3);
+        }
+
+        .link {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .link a {
+            color: #4f67b7;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .error {
+            color: #d93025;
+            background: #f8d7da;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 15px;
+            text-align: center;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Sunrise Hospital AI Assistant</h1>
+
+   <div class="container">
+    <div style="display: flex; background: #eee; border-radius: 10px; margin-bottom: 25px; padding: 5px;">
+        <div id="patientTab" onclick="switchLogin('patient')" style="flex: 1; text-align: center; padding: 10px; cursor: pointer; border-radius: 8px; background: #1f6f8b; color: white; font-weight: bold; transition: 0.3s;">
+            Patient
+        </div>
+        <div id="adminTab" onclick="switchLogin('admin')" style="flex: 1; text-align: center; padding: 10px; cursor: pointer; border-radius: 8px; color: #555; font-weight: bold; transition: 0.3s;">
+            Admin
+        </div>
+    </div>
+
+    <div id="patientForm">
+        <h2 style="font-size: 20px;">Patient Access</h2>
+        <form action="/login" method="POST">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+        <div class="link">
+            <p>New patient? <a href="/signup">Create an account</a></p>
+        </div>
+    </div>
+
+    <div id="adminForm" style="display: none;">
+        <h2 style="font-size: 20px; color: #144d5e;">Admin Control</h2>
+        <form action="/admin_login" method="POST">
+            <input type="text" name="admin_user" placeholder="Username" required>
+            <input type="password" name="admin_pass" placeholder="Password" required>
+            <button type="submit" style="background: #144d5e;">Login as Administrator</button>
+        </form>
+        <div class="link">
+            <p style="color: #888;">Restricted Access Area</p>
+        </div>
+    </div>
+
+    {% if error %}
+    <p class="error">{{error}}</p>
+    {% endif %}
+</div>
+
+<script>
+function switchLogin(type) {
+    const pForm = document.getElementById('patientForm');
+    const aForm = document.getElementById('adminForm');
+    const pTab = document.getElementById('patientTab');
+    const aTab = document.getElementById('adminTab');
+
+    if (type === 'admin') {
+        pForm.style.display = 'none';
+        aForm.style.display = 'block';
+        aTab.style.background = '#144d5e';
+        aTab.style.color = 'white';
+        pTab.style.background = 'transparent';
+        pTab.style.color = '#555';
+    } else {
+        pForm.style.display = 'block';
+        aForm.style.display = 'none';
+        pTab.style.background = '#1f6f8b';
+        pTab.style.color = 'white';
+        aTab.style.background = 'transparent';
+        aTab.style.color = '#555';
+    }
+}
+</script>
+
+</body>
+</html>

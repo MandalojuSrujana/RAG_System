@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel | Sunrise AI</title>
+    <style>
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #f0f2f5; display: flex; }
+        
+        /* Sidebar */
+        .sidebar { width: 250px; height: 100vh; background: #144d5e; color: white; padding: 20px; position: fixed; }
+        .sidebar h2 { font-size: 20px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 20px; }
+        .nav-item { padding: 15px; cursor: pointer; border-radius: 8px; margin-bottom: 5px; transition: 0.3s; color: #cbd5e0; text-decoration: none; display: block; }
+        .nav-item:hover { background: rgba(255,255,255,0.1); color: white; }
+        .active { background: #1f6f8b; color: white; }
+
+        /* Main Content */
+        .main-content { margin-left: 250px; flex: 1; padding: 40px; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        
+        /* Stats Cards */
+        .stats-container { display: flex; gap: 20px; margin-bottom: 40px; }
+        .card { background: white; flex: 1; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .card h3 { margin: 0; color: #718096; font-size: 14px; text-transform: uppercase; }
+        .card p { margin: 10px 0 0; font-size: 28px; font-weight: bold; color: #1a202c; }
+
+        /* Table Styling */
+        .table-container { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th { text-align: left; padding: 12px; border-bottom: 2px solid #edf2f7; color: #4a5568; }
+        td { padding: 12px; border-bottom: 1px solid #edf2f7; color: #2d3748; font-size: 14px; }
+        tr:hover { background: #f7fafc; }
+
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; text-transform: uppercase; }
+        .badge-active { background: #c6f6d5; color: #22543d; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2>Sunrise Admin</h2>
+        <a href="#" class="nav-item active">📊 Dashboard</a>
+        <a href="#" class="nav-item">📅 Appointments</a>
+        <a href="#" class="nav-item">👥 Patients</a>
+        <a href="#" class="nav-item">🤖 AI Analytics</a>
+        <div style="margin-top: 50px;">
+            <a href="/logout" class="nav-item" style="color: #feb2b2;">🚪 Logout</a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <h1 style="margin:0; color: #1a202c;">Hospital Overview</h1>
+            <div style="color: #718096;">Current Date: 28 March 2026</div>
+        </div>
+
+        <div class="stats-container">
+            <div class="card">
+                <h3>Total Registered Patients</h3>
+                <p>{{ total_patients }}</p>
+            </div>
+            <div class="card">
+                <h3>Today's Appointments</h3>
+                <p>{{ today_count }}</p>
+            </div>
+            <div class="card">
+                <h3>System Status</h3>
+                <p style="color: #38a169; font-size: 18px;">● AI Core Online</p>
+            </div>
+        </div>
+        
+        <div class="table-container" style="margin-bottom: 30px; border-top: 4px solid #144d5e;">
+    <h2 style="margin:0; font-size: 18px; color: #144d5e;">📤 Upload Patient Medical Report</h2>
+    <p style="font-size: 13px; color: #666;">Enter the exact patient username and upload their history (.txt or .pdf)</p>
+    
+    <form action="/admin_upload" method="POST" enctype="multipart/form-data" style="display: flex; gap: 15px; margin-top: 15px;">
+        <input type="text" name="patient_username" placeholder="Patient Username" required 
+               style="flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+        
+        <input type="file" name="report_file" required 
+               style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 6px; background: #f9f9f9;">
+        
+        <button type="submit" style="background: #144d5e; color: white; border: none; padding: 10px 25px; border-radius: 6px; cursor: pointer; font-weight: bold;">
+            Upload Report
+        </button>
+    </form>
+</div>
+
+        <div class="table-container">
+            <h2 style="margin:0; font-size: 18px;">All Appointments</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Patient Username</th>
+                        <th>Department</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for apt in appointments %}
+                    <tr>
+                        <td>#SR-{{ apt[0] }}</td>
+                        <td><strong>{{ apt[1] }}</strong></td>
+                        <td>{{ apt[2] }}</td>
+                        <td>{{ apt[3] }}</td>
+                        <td>{{ apt[4] }}</td>
+                        <td><span class="badge badge-active">Confirmed</span></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>

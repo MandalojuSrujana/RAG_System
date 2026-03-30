@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Dashboard</title>
+
+<style>
+
+body {
+    margin: 0;
+    font-family: Arial;
+    background: #f8f9fa; /* Light grey background for the whole page */
+    overflow-y: auto;    /* Change hidden to auto */
+}
+
+.slider {
+    position: relative;
+    width: 100%;
+    height: 80vh;        /* Slightly smaller to accommodate the new bar */
+    overflow: hidden;
+}
+
+.header {
+    background: #2a89ac;
+    color: white;
+    padding: 15px 25px;
+    font-size: 20px;
+    display: flex;            
+    justify-content: space-between; 
+    align-items: center;      
+}
+
+.logout a {
+    color: white;
+    text-decoration: none;
+    background: #144d5e;     
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.logout a:hover {
+    background: #0f3c4a;
+}
+
+
+.slides{
+display:flex;
+height:100%;
+transition:transform 0.7s ease;
+}
+
+.slide{
+min-width:100%;
+height:100%;
+background-size:contain;
+background-repeat:no-repeat;
+background-position:center;
+display:flex;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+position:relative;
+}
+
+.slide::before{
+content:"";
+position:absolute;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.4);
+top:0;
+left:0;
+}
+
+.content{
+position:relative;
+z-index:2;
+color:white;
+text-align:center;
+font-size:40px;
+}
+
+button{
+margin-top:20px;
+padding:12px 25px;
+font-size:18px;
+background:#1f6f8b;
+color:white;
+border:none;
+border-radius:6px;
+cursor:pointer;
+}
+
+button:hover{
+background:#15576e;
+}
+
+.arrow{
+position:absolute;
+top:50%;
+font-size:40px;
+color:white;
+cursor:pointer;
+padding:10px;
+background:rgba(0,0,0,0.5);
+border-radius:50%;
+transform:translateY(-50%);
+z-index:3;
+}
+
+.left{ left:20px; }
+.right{ right:20px; }
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <div class="welcome">Welcome {{patient_name}} 👋</div>
+    
+    <div class="logout">
+        <a href="/logout">Logout</a>
+    </div>
+</div>
+
+<div style="background: #e3f2fd; border-bottom: 2px solid #1f6f8b; padding: 15px 0; color: #164b5f; width: 100%;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 25px;">
+        
+        {% if appointments %}
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <strong style="text-transform: uppercase; font-size: 13px; letter-spacing: 0.5px;">📅 Your Upcoming Schedule:</strong>
+                <a href="/appointment" style="background: #1f6f8b; color: white; text-decoration: none; font-weight: bold; padding: 6px 15px; border-radius: 5px; font-size: 13px;">
+                    + Book Another Appointment
+                </a>
+            </div>
+
+           {% for apt in appointments %}
+<div style="display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.6); padding: 10px; border-radius: 8px; margin-bottom: 8px; border-left: 4px solid #1f6f8b;">
+    <div style="display: flex; align-items: center; gap: 20px;">
+        <span style="background: #1f6f8b; color: white; padding: 2px 10px; border-radius: 20px; font-size: 12px;">
+            {{ apt.doctor }} Dept.
+        </span>
+        <span><strong>Date:</strong> {{ apt.date }}</span>
+        <span><strong>Time:</strong> {{ apt.time }}</span>
+    </div>
+
+    <div style="display: flex; gap: 10px; align-items: center;">
+        
+        <a href="/download_slip/{{ apt.id }}" 
+           style="color: #1f6f8b; text-decoration: none; font-weight: bold; border: 1.5px solid #1f6f8b; padding: 4px 12px; border-radius: 5px; font-size: 12px; display: flex; align-items: center; gap: 5px; transition: 0.3s;"
+           onmouseover="this.style.background='#1f6f8b'; this.style.color='white';"
+           onmouseout="this.style.background='transparent'; this.style.color='#1f6f8b';">
+            <span>📥</span> Slip
+        </a>
+
+        {% if apt.show_cancel %}
+            <a href="/cancel_appointment/{{ apt.id }}" 
+               onclick="return confirm('Are you sure you want to cancel? This slot will be released.');"
+               style="color: #d32f2f; text-decoration: none; font-weight: bold; border: 1.5px solid #d32f2f; padding: 4px 12px; border-radius: 5px; font-size: 12px;">
+                Cancel
+            </a>
+        {% endif %}
+    </div>
+</div>
+{% endfor %}
+
+        {% else %}
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 10px; color: #666;">
+                    <span style="font-size: 18px;">🔔</span>
+                    <span>No upcoming appointments scheduled.</span>
+                </div>
+                <a href="/appointment" style="background: #1f6f8b; color: white; text-decoration: none; font-weight: bold; padding: 6px 15px; border-radius: 5px; font-size: 13px;">
+                    Schedule a Visit Now
+                </a>
+            </div>
+        {% endif %}
+        
+    </div>
+</div>
+
+<div style="position: relative; height: 80vh; background: url('/static/hospbg.jpg'); background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center;">
+    
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.4);"></div>
+
+    <div style="position: relative; z-index: 2; display: flex; gap: 30px; max-width: 900px; width: 90%;">
+        
+        <div style="flex: 1; background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 20px; padding: 40px; text-align: center; color: white; transition: 0.3s; cursor: pointer;" 
+             onmouseover="this.style.transform='translateY(-10px)'; this.style.background='rgba(255, 255, 255, 0.25)';" 
+             onmouseout="this.style.transform='translateY(0)'; this.style.background='rgba(255, 255, 255, 0.15)';"
+             onclick="window.location.href='/chat'">
+            <div style="font-size: 50px; margin-bottom: 15px;">🤖</div>
+            <h2 style="margin: 0; font-size: 24px;">AI Medical Assistant</h2>
+            <p style="font-size: 14px; opacity: 0.9; margin: 15px 0 25px;">Ask about symptoms, hospital info, or medical guidelines instantly.</p>
+            <span style="display: inline-block; background: #2a89ac; padding: 10px 30px; border-radius: 30px; font-weight: bold; text-transform: uppercase; font-size: 13px;">Start Chatting</span>
+        </div>
+
+        <div style="flex: 1; background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 20px; padding: 40px; text-align: center; color: white; transition: 0.3s; cursor: pointer;" 
+             onmouseover="this.style.transform='translateY(-10px)'; this.style.background='rgba(255, 255, 255, 0.25)';" 
+             onmouseout="this.style.transform='translateY(0)'; this.style.background='rgba(255, 255, 255, 0.15)';"
+             onclick="window.location.href='/patient_history'">
+            <div style="font-size: 50px; margin-bottom: 15px;">📜</div>
+            <h2 style="margin: 0; font-size: 24px;">Medical Records</h2>
+            <p style="font-size: 14px; opacity: 0.9; margin: 15px 0 25px;">Review your previous AI consultations and download health summaries.</p>
+            <span style="display: inline-block; background: #144d5e; padding: 10px 30px; border-radius: 30px; font-weight: bold; text-transform: uppercase; font-size: 13px;">View History</span>
+        </div>
+
+    </div>
+</div>
+
+<div style="background: #fdfdfd; padding: 0 0 40px 0; color: #333;">
+
+    <div style="max-width: 1200px; margin: 0 auto; padding: 60px 25px; display: flex; gap: 25px; flex-wrap: wrap;">
+        
+        <div style="flex: 1; min-width: 280px; background: white; padding: 40px 25px; border-radius: 15px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-top: 4px solid #2a89ac; transition: 0.3s;" onmouseover="this.style.transform='translateY(-10px)'" onmouseout="this.style.transform='translateY(0)'">
+            <div style="font-size: 45px; margin-bottom: 20px;">🏥</div>
+            <h3 style="color: #1f6f8b; margin-bottom: 15px;">Advanced Infrastructure</h3>
+            <p style="font-size: 14px; color: #666; line-height: 1.6;">Equipped with the latest diagnostic technology and smart-ward systems for superior patient monitoring.</p>
+        </div>
+
+        <div style="flex: 1; min-width: 280px; background: white; padding: 40px 25px; border-radius: 15px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-top: 4px solid #144d5e; transition: 0.3s;" onmouseover="this.style.transform='translateY(-10px)'" onmouseout="this.style.transform='translateY(0)'">
+            <div style="font-size: 45px; margin-bottom: 20px;">🩺</div>
+            <h3 style="color: #1f6f8b; margin-bottom: 15px;">Expert Specialists</h3>
+            <p style="font-size: 14px; color: #666; line-height: 1.6;">Our team comprises board-certified professionals across Cardiology, Neurology, and Pediatrics.</p>
+        </div>
+
+        <div style="flex: 1; min-width: 280px; background: white; padding: 40px 25px; border-radius: 15px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-top: 4px solid #2a89ac; transition: 0.3s;" onmouseover="this.style.transform='translateY(-10px)'" onmouseout="this.style.transform='translateY(0)'">
+            <div style="font-size: 45px; margin-bottom: 20px;">💻</div>
+            <h3 style="color: #1f6f8b; margin-bottom: 15px;">AI Integration</h3>
+            <p style="font-size: 14px; color: #666; line-height: 1.6;">Utilizing Sentence-Transformers and FAISS indexing to provide instant, human-like medical guidance.</p>
+        </div>
+    </div>
+
+    <div style="background: #f4f9fb; padding: 80px 25px; border-top: 1px solid #e1eef2;">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            
+            <div style="display: flex; gap: 60px; align-items: center; margin-bottom: 60px; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 300px;">
+                    <h2 style="color: #1f6f8b; font-size: 28px; margin-bottom: 20px;">Pioneering the Future of Healthcare</h2>
+                    <p style="line-height: 1.8; color: #555; font-size: 16px;">
+                        Founded in 2026, <strong>Sunrise AI Hospital</strong> was built on the belief that medical expertise should be accessible, accurate, and immediate. Grounded in advanced <strong>RAG Technology</strong>, we ensure every interaction is verified.
+                    </p>
+                </div>
+                
+                <div style="flex: 1; min-width: 300px; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.03); border-left: 5px solid #1f6f8b;">
+                    <h4 style="margin-top: 0; color: #144d5e;">Why Sunrise AI?</h4>
+                    <ul style="padding-left: 20px; color: #444; line-height: 2; font-size: 14px;">
+                        <li><strong>Verified Knowledge:</strong> Answers strictly from hospital PDFs.</li>
+                        <li><strong>Real-time Scheduling:</strong> Syncs with doctor calendars.</li>
+                        <li><strong>Data Privacy:</strong> Secure SQLite-encrypted history.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 30px; font-size: 14px; color: #777; border-top: 1px solid #dce8eb; padding-top: 40px;">
+                <div style="flex: 1; min-width: 200px;">
+                    <strong style="color: #1f6f8b; display: block; margin-bottom: 8px;">📍 Visit Us</strong>
+                    <a href="https://www.google.com/maps/place/Sunrise+Hospitals+-+Hayathnagar+%7C+Best+Hospital+in+Hayathnagar,+Hyderabad+%7C+Multispecialty+Hospital/@17.328009,78.5991548,17z/data=!3m1!4b1!4m6!3m5!1s0x3bcba1cf9958b563:0xae85bc2f6fdcf0c1!8m2!3d17.328009!4d78.6017297!16s%2Fg%2F11b6j5p5m_?entry=ttu&g_ep=EgoyMDI2MDMyNC4wIKXMDSoASAFQAw%3D%3D" target="_blank" style="text-decoration: none; color: #555;">
+                        Hayathnagar, Hyderabad,<br>Telangana, India - 501505<br>
+                        <span style="font-size: 11px; color: #2a89ac; font-weight: bold;">(Get Directions ↗)</span>
+                    </a>
+                </div>
+
+                <div style="flex: 1; min-width: 200px; text-align: center;">
+                    <strong style="color: #1f6f8b; display: block; margin-bottom: 8px;">📞 Contact</strong>
+                    Emergency: +1 (800) 555-0199<br>
+                    Support: help@sunrise-ai.com
+                </div>
+
+                <div style="flex: 1; min-width: 200px; text-align: right;">
+                    <strong style="color: #1f6f8b; display: block; margin-bottom: 8px;">⏰ Operation Hours</strong>
+                    Hospital: 24/7 Open<br>
+                    OPD: 9:00 AM - 6:00 PM (Mon-Sat)
+                </div>
+            </div>
+
+            <div style="margin-top: 50px; padding-top: 20px; border-top: 1px solid #dce8eb; text-align: center; font-size: 12px; color: #999;">
+                © 2026 Sunrise Hospital AI Project. All rights reserved. | Built with RAG Technology
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+const slides = document.getElementById("slides")
+const slideItems = document.querySelectorAll(".slide")
+
+let index = 1
+let total = slideItems.length
+
+slides.style.transform = "translateX(-100%)"
+
+function nextSlide(){
+
+if(index >= total-1) return
+
+index++
+
+slides.style.transition = "transform 0.7s ease"
+slides.style.transform = "translateX(-" + index*100 + "%)"
+
+}
+
+function prevSlide(){
+
+if(index <= 0) return
+
+index--
+
+slides.style.transition = "transform 0.7s ease"
+slides.style.transform = "translateX(-" + index*100 + "%)"
+
+}
+
+slides.addEventListener("transitionend", () => {
+
+if(index === total-1){
+
+slides.style.transition = "none"
+index = 1
+slides.style.transform = "translateX(-100%)"
+
+}
+
+if(index === 0){
+
+slides.style.transition = "none"
+index = total-2
+slides.style.transform = "translateX(-" + index*100 + "%)"
+
+}
+
+})
+
+setInterval(() => {
+nextSlide()
+}, 4000)
+
+</script>
+
+</body>
+</html>

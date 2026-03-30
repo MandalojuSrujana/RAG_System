@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hospital Knowledge Assistant</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f4f8fb;
+            overflow: hidden; 
+        }
+
+        /* TOP NAVIGATION */
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #4f67b7;
+            color: white;
+            padding: 12px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .nav-links a, .logout a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .logout a {
+            background: #144d5e;
+            padding: 6px 15px;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .logout a:hover {
+            background: #0f3c4a;
+        }
+
+        /* HEADER */
+        .header {
+            background: #4f67b7;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .header h1 { margin: 5px 0; font-size: 24px; }
+        .header p { margin: 5px 0; opacity: 0.9; }
+
+        /* LAYOUT CONTAINER */
+        .container {
+            display: flex;
+            height: calc(100vh - 140px); 
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 25%;
+            background: #e7f1ff;
+            padding: 20px;
+            border-right: 2px solid #d0e3ff;
+            overflow-y: auto;
+        }
+
+        .sidebar h3 { color: #0b5ed7; margin-top: 20px; }
+        .sidebar h3:first-child { margin-top: 0; }
+        .sidebar ul { padding-left: 20px; }
+        .sidebar li { margin-bottom: 12px; }
+        .sidebar a { text-decoration: none; color: #0b5ed7; font-weight: 500; }
+
+        /* MAIN CHAT AREA */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 40px;
+            background: white;
+        }
+
+        .chat-history {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .answer {
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            border-left: 6px solid;
+        }
+
+        /* Green for Correct Response */
+.answer.success { 
+    background: #e8f5e9; 
+    color: #2e7d32; 
+    border-left: 6px solid #4caf50; 
+}
+
+/* Red for Invalid Question */
+.answer.error { 
+    background: #ffebee; 
+    color: #c62828; 
+    border-left: 6px solid #ef5350; 
+}
+
+/* Blue for Contact Support */
+.answer.info { 
+    background: #e3f2fd; 
+    color: #1565c0; 
+    border-left: 6px solid #2196f3; 
+}
+
+        /* INPUT AREA & BUTTON ALIGNMENT */
+        .input-area {
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .question-box {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            resize: none;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+
+        /* Flex container for the two buttons */
+        .button-group {
+            display: flex;
+            justify-content: space-between; /* Pushes Ask to left and Clear to right */
+            align-items: center;
+        }
+
+        .ask-btn {
+            padding: 12px 25px;
+            background: #0b5ed7;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .clear-btn {
+            padding: 12px 20px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .ask-btn:hover { background: #084298; }
+        .clear-btn:hover { background: #b02a37; }
+
+        .section-box {
+            background: #eef5ff;
+            border-left: 6px solid #0b5ed7;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="topbar">
+    <div class="nav-links">
+        <a href="/dashboard">🡨 Dashboard</a>
+    </div>
+    <div class="logout">
+        <a href="/logout">Logout</a>
+    </div>
+</div>
+
+<div class="header">
+    <h1>🏥 Sunrise Hospital Knowledge Assistant</h1>
+    <p>Ask about departments, treatments, policies, and services</p>
+</div>
+
+<div class="container">
+
+    <div class="sidebar">
+        <h3>Hospital Information</h3>
+        <ul>
+            <li><a href="/chat?section=policies">Hospital Policies</a></li>
+            <li><a href="/chat?section=doctors">Departments & Doctors</a></li>
+            <li><a href="/chat?section=treatments">Treatment Information</a></li>
+            <li><a href="/chat?section=visiting">Visiting Hours</a></li>
+            <li><a href="/chat?section=billing">Billing & Insurance</a></li>
+            <li><a href="/chat?section=guidelines">Patient Guidelines</a></li>
+            <li><a href="/chat?section=emergency">Emergency Services</a></li>
+        </ul>
+
+        <hr>
+
+        <h3>Contact Hospital</h3>
+        <p>
+            📞 Phone: +91-XXXXXXXXXX<br><br>
+            📧 Email: support@sunrisehospital.com<br><br>
+            🏥 Address: Hyderabad, Telangana
+        </p>
+    </div>
+
+    <div class="main">
+        {% if section_content %}
+            <a href="/chat">
+                <button class="ask-btn" style="margin-bottom:10px;">⬅ Back to Chat</button>
+            </a>
+            <div class="section-box">
+                <pre style="white-space:pre-wrap;font-family:Arial;">{{section_content}}</pre>
+            </div>
+        {% else %}
+
+            <div class="chat-history" id="chat-history">
+                <h3 style="color: #4f67b7;">Conversation</h3>
+                {% for chat in chat_history %}
+                    <div style="margin-bottom: 8px; font-size: 15px; color: #333;">
+                        <b>User:</b> {{chat.question}}
+                    </div>
+                    <div class="answer {{ chat.type if chat.type else 'success' }}">
+                        <b>Assistant:</b> <span>{{ chat.answer | safe }}</span>
+                    </div>
+                    <hr style="border:0; border-top: 1px solid #eee; margin: 15px 0;">
+                {% endfor %}
+            </div>
+
+            <div class="input-area">
+                <form method="POST">
+                    <!-- <div style="margin-bottom: 10px; font-size: 14px; color: #4f67b7;">
+                        <label for="language"><b>Select Language:</b></label>
+                        <select name="language" id="language" style="padding: 5px; border-radius: 5px; border: 1px solid #4f67b7;">
+                            <option value="en">English</option>
+                            <option value="te">Telugu (తెలుగు)</option>
+                            <option value="hi">Hindi (हिंदी)</option>
+                        </select>
+                    </div> -->
+                    <textarea 
+                        name="question"
+                        class="question-box"
+                        placeholder="Example: What are the visiting hours for the ICU?"
+                        rows="2"
+                        required
+                    ></textarea>
+                    
+                    <div class="button-group">
+                        <button type="submit" class="ask-btn">Ask Assistant</button>
+                        
+                        <a href="/clear_chat" onclick="return confirm('Are you sure you want to permanently delete all chat history?');" style="text-decoration: none;">
+                            <button type="button" class="clear-btn">🗑️ Clear Chat History</button>
+                        </a>
+                    </div>
+                </form>
+            </div>
+
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    window.onload = function() {
+        const chatHistory = document.getElementById('chat-history');
+        if (chatHistory) {
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
+    };
+
+    function typeEffect(element, speed) {
+        let text = element.innerHTML;
+        element.innerHTML = "";
+        let i = 0;
+        let timer = setInterval(function() {
+            if (i < text.length) {
+                element.append(text.charAt(i));
+                i++;
+            } else {
+                clearInterval(timer);
+            }
+        }, speed);
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // Apply only to the LAST assistant message
+        const answers = document.querySelectorAll('.answer span');
+        if (answers.length > 0) {
+            typeEffect(answers[answers.length - 1], 30); 
+        }
+    });
+
+</script>
+
+</body>
+</html>

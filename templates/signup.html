@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Account</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: url("/static/bg.jpg");
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            margin: 0;
+            /* Column layout to match login.html */
+            display: flex;
+            flex-direction: column; 
+            align-items: flex-start; 
+            padding-left: 100px;
+        }
+
+        /* Matches login.html exactly */
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-align: left;
+            letter-spacing: -1.5px;
+            
+            background: linear-gradient(90deg, #06171d 0%, #4f67b7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+
+            margin-top: 60px; 
+            margin-bottom: 40px;
+            width: fit-content;
+            
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .container {
+            width: 400px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            animation: slideIn 0.8s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #333;
+            font-size: 24px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 12px;
+            background: #1f6f8b;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #15576e;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(31, 111, 139, 0.3);
+        }
+
+        .link {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .link a {
+            color: #4f67b7;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .error {
+            color: #d93025;
+            background: #f8d7da;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 15px;
+            text-align: center;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Sunrise Hospital AI Assistant</h1>
+
+    <div class="container">
+        <h2>Create Account</h2>
+        <form method="POST">
+            <input type="text" name="fullname" placeholder="Full Name" required>
+            <input type="text" name="mobile" placeholder="Mobile Number" required>
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Register</button>
+        </form>
+
+        <div class="link">
+            <p>Already have an account? <a href="/">Login</a></p>
+        </div>
+
+        {% if error %}
+        <p class="error">{{error}}</p>
+        {% endif %}
+    </div>
+
+</body>
+</html>

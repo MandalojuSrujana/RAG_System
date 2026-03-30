@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Patient History</title>
+<style>
+    body {
+        font-family: 'Inter', 'Segoe UI', sans-serif;
+        margin: 0;
+        min-height: 100vh;
+        /* 1. High-end Mesh Gradient Background */
+        background-color: #f8fafc;
+        background-image: 
+            radial-gradient(at 0% 0%, rgba(186, 230, 253, 0.5) 0px, transparent 50%),
+            radial-gradient(at 100% 0%, rgba(199, 210, 254, 0.5) 0px, transparent 50%),
+            radial-gradient(at 100% 100%, rgba(254, 215, 226, 0.5) 0px, transparent 50%),
+            radial-gradient(at 0% 100%, rgba(224, 242, 254, 0.5) 0px, transparent 50%);
+        background-attachment: fixed;
+        display: flex;
+        justify-content: center;
+        padding: 80px 20px;
+    }
+
+    /* 2. Floating Glass Header */
+    .header {
+        background: rgba(169, 82, 102, 0.9); /* Dark Navy */
+        backdrop-filter: blur(10px);
+        color: white;
+        padding: 25px 40px;
+        border-radius: 24px 24px 0 0;
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-bottom: none;
+    }
+
+    /* 3. The Glassmorphism Card */
+
+    /* 4. Maintaining data integrity */
+    pre {
+        white-space: pre-wrap;
+        font-family: 'Inter', sans-serif;
+        line-height: 1.9;
+        font-size: 17px;
+        color: #1e293b;
+        margin: 0;
+        text-shadow: 0 1px 0px rgba(255,255,255,0.5);
+    }
+
+    /* 5. Neon Styled Buttons */
+    .back-btn {
+        position: fixed;
+        top: 30px;
+        left: 40px;
+        padding: 12px 24px;
+        background: rgba(234, 164, 180, 0.9);
+        color: #0f172a;
+        text-decoration: none;
+        border-radius: 14px;
+        font-weight: 600;
+        font-size: 14px;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid #e2e8f0;
+    }
+
+    .back-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        background: #f8fafc;
+    }
+
+    .export-btn {
+        background: #10b981;
+        color: white;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        text-decoration: none;
+        transition: 0.3s ease;
+        box-shadow: 0 4px 14px 0 rgba(16, 185, 129, 0.39);
+    }
+
+    .export-btn:hover {
+        background: #059669;
+        box-shadow: 0 6px 20px rgba(5, 150, 105, 0.23);
+        transform: scale(1.02);
+    }
+
+    /* 1. Updated Container: Remove the fixed background color here */
+.container {
+    width: 100%;
+    max-width: 900px;
+    position: relative;
+    border-radius: 24px;
+    background: #ffffff;
+    /* Remove 'background' from here so it doesn't show through the bottom */
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1); 
+    overflow: hidden; 
+    /* This ensures the container height matches the content exactly */
+    display: table; 
+}
+
+/* 2. Updated Card: This now controls the background and shrinking */
+.card {
+    background: rgba(255, 255, 255, 0.85); 
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    /* Lower the padding for "No History" view, increase it for data */
+    padding: 40px 60px; 
+    border-radius: 0 0 24px 24px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    /* Ensures no extra height is forced */
+    min-height: auto; 
+}
+
+/* 3. Message Styling (for the "No history" text) */
+.card p {
+    text-align: center;
+    font-size: 18px;
+    color: #64748b;
+    margin: 0;
+    font-weight: 500;
+}
+</style>
+</head>
+
+<body>
+
+<a href="/dashboard" class="back-btn">🡨 Dashboard</a>
+
+<div class="container">
+    <div class="header">
+        <span>Your Medical History</span>
+        
+        {% if history %}
+        <a href="/download_summary" class="export-btn">
+            📥 Export as PDF
+        </a>
+        {% endif %}
+    </div>
+
+    {% if history %}
+    <div class="card">
+        <pre>{{history}}</pre>
+    </div>
+    {% else %}
+<div class="card" style="padding: 40px; text-align: center;">
+    <div style="font-size: 40px; margin-bottom: 10px;">📋</div>
+    <p>{{message}}</p>
+</div>
+{% endif %}
+</div>
+
+</body>
+</html>
